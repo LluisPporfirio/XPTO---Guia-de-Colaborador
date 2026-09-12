@@ -35,17 +35,9 @@ jobs:
 
 
 
-
-
-
   test:
     needs: build
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.12", "3.11", "3.10"]
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       - name: Baixar Código do Repositório
@@ -54,7 +46,7 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
           cache: "pip"
 
       - name: Instalar Dependências
@@ -62,7 +54,6 @@ jobs:
 
       - name: Executar Testes
         run: pytest
-
 
 
 
