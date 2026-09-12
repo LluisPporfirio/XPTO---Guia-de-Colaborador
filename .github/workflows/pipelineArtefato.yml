@@ -5,19 +5,6 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Gerar Artefato Zip
-        run: zip -r Calculadora.zip .
-
-      - name: Publicar Artefato
-        uses: actions/upload-artifact@v4
-        with:
-          name: codigo-Buildado
-          path: Calculadora.zip
 
   test:
     needs: build
@@ -43,6 +30,21 @@ jobs:
 
       - name: Executar Testes
         run: pytest
+
+
+
+
+      - name: Gerar Artefato Zip
+        run: zip -r Calculadora.zip .
+
+      - name: Publicar Artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: codigo-Buildado
+          path: Calculadora.zip
+
+
+
 
       - name: Baixar Artefato
         uses: actions/download-artifact@v4
