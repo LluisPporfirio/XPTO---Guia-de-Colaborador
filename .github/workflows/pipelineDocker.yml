@@ -1,0 +1,54 @@
+name: Pipeline com Docker
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    needs: quality
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # O "Login" é necessário para enviar a imagem para o Docker Hub
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
+      # Aqui o Docker faz o npm install e configura o ambiente sozinho
+      - name: Build e Push da Imagem
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USER }}/pipeline-ci:latest
+  test:
+    name: Testar Container
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar imagem salva
+        uses: actions/download-artifact@v4
+        with:
+          name: imagem-docker
+
+      - name: Carregar imagem Docker
+        run: docker load -i imagem.tar
+
+      - name: Executar testes
+        run: docker run --rm meu-projeto-fatec:latest pytest
+
+  deploy:
+    name: Deploy
+    needs: push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Executar deploy
+        run: echo "Imagem enviada! Pronta para deploy no servidor."
