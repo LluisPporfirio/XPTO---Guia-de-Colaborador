@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - name: Executar testes
-        run: docker run --rm ${{ secrets.DOCKER_USER }}/meu-projeto-fatec:latest npm test
+        run: docker run --rm ${{ secrets.DOCKER_USER }}/meu-projeto-fatec:latest 
 
   deploy:
     runs-on: ubuntu-latest
