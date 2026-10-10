@@ -12,32 +12,41 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
-      # O Login é necessário para enviar a imagem para o Docker Hub
+      # Login necessário para enviar a imagem ao Docker Hub
       - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
 
-      # Aqui o Docker constrói e envia a imagem
+      # Constrói e envia a imagem Python
       - name: Build e Push da Imagem
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USER }}/pipeline-ci:latest
+          tags: ${{ secrets.DOCKER_USER }}/meu-projeto-fatec:latest
+
   test:
     name: Testar Container
     needs: build
     runs-on: ubuntu-latest
 
     steps:
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+
       - name: Executar testes
-        run: docker run --rm ${{ secrets.DOCKER_USER }}/meu-projeto-fatec:latest 
+        run: docker run --rm ${{ secrets.DOCKER_USER }}/meu-projeto-fatec:latest pytest
 
   deploy:
+    name: Deploy
+    needs: test
     runs-on: ubuntu-latest
 
     steps:
       - name: Executar deploy
-        run: echo "Imagem enviada! Pronta para deploy no servidor."
+        run: echo "Imagem enviada! Testes aprovados, pronta para deploy no servidor."
