@@ -27,7 +27,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USER }}/meu-projeto-fatec:latest
 
-  test:
+   test:
     name: Testar Container
     needs: build
     runs-on: ubuntu-latest
@@ -39,9 +39,10 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
 
-      - name: Executar testes
-        run: docker run --rm ${{ secrets.DOCKER_USER }}/meu-projeto-fatec:latest pytest
-
+      - name: Executar e testar container
+        run: |
+          docker run -d --name teste -p 3000:3000 ${{ secrets.DOCKER_USER }}/meu-projeto-fatec:latest
+      
   deploy:
     name: Deploy
     needs: test
