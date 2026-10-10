@@ -32,16 +32,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixar imagem salva
-        uses: actions/download-artifact@v4
-        with:
-          name: imagem-docker
-
-      - name: Carregar imagem Docker
-        run: docker load -i imagem.tar
-
       - name: Executar testes
-        run: docker run --rm meu-projeto-fatec:latest pytest
+        run: docker run --rm ${{ secrets.DOCKER_USER }}/meu-projeto-fatec:latest npm test
 
   deploy:
     runs-on: ubuntu-latest
