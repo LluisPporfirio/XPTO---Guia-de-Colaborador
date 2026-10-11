@@ -5,6 +5,6 @@ services:
     image: victorHS131/calculadora-app:latest
 
     #serviço auxiliar (O nosso vizinho de teste)
-    servico-vizinho:
+  servico-vizinho:
       image: alpine
       command: sleep infinity

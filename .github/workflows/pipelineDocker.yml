@@ -20,13 +20,18 @@ jobs:
           password: ${{ secrets.DOCKER_PASS }}
 
       # Aqui o Docker constrói e envia a imagem
-      - name: Build e Push da Imagem
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USER }}/pipeline-ci:latest
+      # - name: Build e Push da Imagem
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #    context: .
+      #    push: true
+      #    tags: ${{ secrets.DOCKER_USER }}/pipeline-ci:latest
 
+      - name: Build com Docker Compose
+        run: docker compose build
+
+      - name: Push com Docker Compose
+        run: docker compose push
   test:
     name: Testar Container
     needs: build
